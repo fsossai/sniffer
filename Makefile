@@ -6,4 +6,7 @@ all:
 format:
 	find . -regex '.*\.[c|h]' | xargs clang-format -i
 
-.PHONY: format
+clean:
+	rm -f sniffer.out
+
+.PHONY: clean format

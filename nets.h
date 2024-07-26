@@ -75,7 +75,7 @@ struct eth_frame {
 	unsigned char payload[1];
 };
 
-void printb(unsigned char *head, char *format, unsigned char *str, int dim)
+void printb(const char *head, const char *format, const char *str, int dim)
 {
 	printf("%s", head);
 	for (int i = 0; i < dim; i++) {

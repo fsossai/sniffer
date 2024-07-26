@@ -2,7 +2,7 @@
 #include "netdata.h"
 
 #define BUFFER_SIZE 4096
-#define ARG_ERROR "Errore di sinstassi\n"
+#define ARG_ERROR "Syntax error\n"
 #define MAX_FILTERS 16
 #define ARG_MAX_LENGTH 128
 #define DIVIDE "----------------------------------------------------\n"
@@ -95,15 +95,14 @@ int set_filters(char *llevel)
 
 int sniff()
 {
-	int s, r, len;
-	unsigned long total_data = 0;
-	unsigned long packets_received = 0;
-	char buffer[BUFFER_SIZE], outp[ARG_MAX_LENGTH];
+	int s, r;
+	socklen_t len;
+	char buffer[BUFFER_SIZE];
+	char outp[ARG_MAX_LENGTH];
 	struct sockaddr_ll sll;
 	struct sockaddr *src_addr = (struct sockaddr *)&sll;
 	struct eth_frame *eth = (struct eth_frame *)buffer;
-	struct ip_datagram *ip = (struct ip_datagram *)eth->payload;
-	struct arp_packet *arp = (struct arp_packet *)eth->payload;
+
 	len = sizeof(struct sockaddr_ll);
 	memset(&sll, 0, (sizeof(struct sockaddr_ll)));
 	sll.sll_family = AF_PACKET;
@@ -117,8 +116,6 @@ int sniff()
 		printed = 0;
 		outp[0] = '\0';
 		r = recvfrom(s, buffer, BUFFER_SIZE, 0, src_addr, &len);
-		total_data += r;
-		packets_received++;
 		if (flags & F_DIM)
 			printf("Frame size: %i bytes\n", r);
 		process_eth(eth, outp);
@@ -134,11 +131,13 @@ void showf(struct eth_frame *eth, char *outp)
 {
 	char *start, *end, *cur, all = flags & F_ALL;
 	int i, j;
+
 	struct ip_datagram *ip = (struct ip_datagram *)eth->payload;
 	struct arp_packet *arp = (struct arp_packet *)eth->payload;
 	struct icmp_packet *icmp = (struct icmp_packet *)ip->payload;
 	struct tcp_segment *tcp = (struct tcp_segment *)ip->payload;
 	struct udp_segment *udp = (struct udp_segment *)ip->payload;
+
 	for (i = 0; i < filters_counter || all; i++) {
 		start = NULL;
 		if (i < filters_counter)
@@ -194,7 +193,6 @@ void process_eth(struct eth_frame *eth, char *outp)
 
 void process_ip(struct ip_datagram *ip, char *outp)
 {
-	void *pl = ip->payload;
 	switch (ip->protocol) {
 	case 1:
 		strcat(outp, ".icmp");
