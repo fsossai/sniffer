@@ -1,28 +1,26 @@
+#pragma once
 
 #include <arpa/inet.h>
+#include <linux/if_packet.h>
+#include <netdb.h>
+#include <net/ethernet.h>
 #include <net/if.h>
-#include <sys/types.h>
+#include <net/if.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/wait.h>
-#include <sys/socket.h>
-#include <linux/if_packet.h>
-#include <net/ethernet.h> 
 #include <string.h>
 #include <strings.h>
-#include <unistd.h>
 #include <sys/ioctl.h>
-#include <net/if.h>
-#include <netdb.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 #define HWADDR_LENGTH 6
 
-struct udp_segment
-{
-};
+struct udp_segment {};
 
-struct tcp_segment
-{
+struct tcp_segment {
 	unsigned short s_port;
 	unsigned short d_port;
 	unsigned int seq;
@@ -35,8 +33,7 @@ struct tcp_segment
 	unsigned char payload[1];
 };
 
-struct icmp_packet
-{
+struct icmp_packet {
 	unsigned char type;
 	unsigned char code;
 	unsigned short checksum;
@@ -45,8 +42,7 @@ struct icmp_packet
 	unsigned char payload[1];
 };
 
-struct ip_datagram
-{
+struct ip_datagram {
 	unsigned char ver_ihl;
 	unsigned char tos;
 	unsigned short totlen;
@@ -60,9 +56,7 @@ struct ip_datagram
 	unsigned char payload[1];
 };
 
-
-struct arp_packet
-{
+struct arp_packet {
 	unsigned short htype;
 	unsigned short ptype;
 	unsigned char hlen;
@@ -74,18 +68,18 @@ struct arp_packet
 	unsigned char pdst[4];
 };
 
-struct eth_frame
-{
+struct eth_frame {
 	unsigned char dst[6];
 	unsigned char src[6];
 	unsigned short type;
 	unsigned char payload[1];
 };
 
-void printb(unsigned char *head, unsigned char *format, unsigned char *str, int dim)
+void printb(unsigned char *head, char *format, unsigned char *str, int dim)
 {
-	printf("%s",head);
-	for (int i = 0; i<dim; i++)
-		printf(format,str[i],str[i],str[i]);
+	printf("%s", head);
+	for (int i = 0; i < dim; i++) {
+		printf(format, str[i], str[i], str[i]);
+	}
 	printf("\n");
 }
