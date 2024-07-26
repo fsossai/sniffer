@@ -5,7 +5,6 @@
 #include <netdb.h>
 #include <net/ethernet.h>
 #include <net/if.h>
-#include <net/if.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
