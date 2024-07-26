@@ -23,4 +23,3 @@ void process_tcp(struct tcp_segment *tcp, char *outp);
 void process_udp(struct udp_segment *udp, char *outp);
 void free_all();
 void print_usage();
-
