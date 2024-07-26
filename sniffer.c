@@ -1,11 +1,17 @@
-#include "nets.h"
-#include "netdata.h"
+#include <arpa/inet.h>
+#include <linux/if_packet.h>
+#include <net/ethernet.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#define BUFFER_SIZE 4096
-#define ARG_ERROR "Syntax error\n"
-#define MAX_FILTERS 16
-#define ARG_MAX_LENGTH 128
-#define DIVIDE "----------------------------------------------------\n"
+#include "packets.h"
+#include "prints.h"
+#include "sniffer.h"
+
+#define F_ALL 0x02
+#define F_DIM 0x01
+#define F_LEVELS 0x04
 
 int ifindex;
 char debug = 0;
@@ -14,17 +20,6 @@ char printed;
 unsigned short flags = 0x00;
 struct filter filters[MAX_FILTERS];
 int filters_counter;
-
-int getmacaddr(unsigned char *mac);
-void showf(struct eth_frame *eth, char *outp);
-int set_filters(char *llevel);
-int sniff();
-void process_eth(struct eth_frame *eth, char *outp);
-void process_ip(struct ip_datagram *ip, char *outp);
-void process_tcp(struct tcp_segment *tcp, char *outp);
-void process_udp(struct udp_segment *udp, char *outp);
-void free_all();
-void print_usage();
 
 int main(int argc, char *argv[])
 {

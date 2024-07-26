@@ -1,22 +1,5 @@
 #pragma once
 
-#include <arpa/inet.h>
-#include <linux/if_packet.h>
-#include <netdb.h>
-#include <net/ethernet.h>
-#include <net/if.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <strings.h>
-#include <sys/ioctl.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
-#define HWADDR_LENGTH 6
-
 struct udp_segment {};
 
 struct tcp_segment {
@@ -73,12 +56,3 @@ struct eth_frame {
 	unsigned short type;
 	unsigned char payload[1];
 };
-
-void printb(const char *head, const char *format, const char *str, int dim)
-{
-	printf("%s", head);
-	for (int i = 0; i < dim; i++) {
-		printf(format, str[i], str[i], str[i]);
-	}
-	printf("\n");
-}

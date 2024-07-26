@@ -1,19 +1,20 @@
-#pragma once
-
 #include <stdio.h>
 
-#include "nets.h"
+#include <arpa/inet.h>
+#include <netdb.h>
 
-#define F_ALL 0x02
-#define F_DIM 0x01
-#define F_LEVELS 0x04
+#include "packets.h"
 
-struct filter {
-	int ulen;
-	int llen;
-	char *ulevel_name;
-	char *llevel_name;
-};
+void print_bytes(const char *head, const char *format, const char *str, int dim)
+{
+	printf("%s", head);
+
+	for (int i = 0; i < dim; i++) {
+		printf(format, str[i], str[i], str[i]);
+	}
+
+	printf("\n");
+}
 
 void print_eth(struct eth_frame *eth)
 {
@@ -304,7 +305,7 @@ void print_tcp(struct tcp_segment *tcp, int plength)
 	printf("Header checksum: 0x%.2X 0x%.2X\n",
 	       (tcp->checksum & 0xFF00) >> 8, tcp->checksum & 0x00FF);
 	printf("Urgent pointer: %i\n", htonl(tcp->urgp));
-	printb("Payload: ", "%c", &((char *)tcp)[4 * doffset], plength);
+	print_bytes("Payload: ", "%c", &((char *)tcp)[4 * doffset], plength);
 	printf("\n");
 }
 
