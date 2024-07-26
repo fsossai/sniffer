@@ -18,7 +18,7 @@ char debug = 0;
 char dim = 0;
 char printed;
 unsigned short flags = 0x00;
-struct filter filters[MAX_FILTERS];
+struct filter filters[SNIFFER_MAX_FILTERS];
 int filters_counter;
 
 int main(int argc, char *argv[])
@@ -55,7 +55,7 @@ int set_filters(char *llevel)
 {
 	int i = 0;
 	if (!llevel) {
-		printf(ARG_ERROR);
+		fprintf(stderr, "Syntax error");
 		return -1;
 	}
 	char *ulevel = llevel;
@@ -92,8 +92,8 @@ int sniff()
 {
 	int s, r;
 	socklen_t len;
-	char buffer[BUFFER_SIZE];
-	char outp[ARG_MAX_LENGTH];
+	char buffer[SNIFFER_BUFFER_SIZE];
+	char outp[SNIFFER_ARG_MAX_LENGTH];
 	struct sockaddr_ll sll;
 	struct sockaddr *src_addr = (struct sockaddr *)&sll;
 	struct eth_frame *eth = (struct eth_frame *)buffer;
@@ -110,7 +110,7 @@ int sniff()
 	while (1) {
 		printed = 0;
 		outp[0] = '\0';
-		r = recvfrom(s, buffer, BUFFER_SIZE, 0, src_addr, &len);
+		r = recvfrom(s, buffer, SNIFFER_BUFFER_SIZE, 0, src_addr, &len);
 		if (flags & F_DIM)
 			printf("Frame size: %i bytes\n", r);
 		process_eth(eth, outp);
@@ -118,7 +118,7 @@ int sniff()
 			printf(" %s\t (%.4i B)\n", outp, r);
 		showf(eth, outp);
 		if (printed)
-			printf(DIVIDE);
+      printf("----------------------------------------------------\n");
 	}
 }
 

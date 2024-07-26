@@ -2,11 +2,9 @@
 
 #include "packets.h"
 
-#define BUFFER_SIZE 4096
-#define ARG_ERROR "Syntax error\n"
-#define MAX_FILTERS 16
-#define ARG_MAX_LENGTH 128
-#define DIVIDE "----------------------------------------------------\n"
+#define SNIFFER_BUFFER_SIZE 4096
+#define SNIFFER_MAX_FILTERS 16
+#define SNIFFER_ARG_MAX_LENGTH 128
 
 struct filter {
 	int ulen;

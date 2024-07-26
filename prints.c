@@ -1,7 +1,6 @@
-#include <stdio.h>
-
 #include <arpa/inet.h>
 #include <netdb.h>
+#include <stdio.h>
 
 #include "packets.h"
 
